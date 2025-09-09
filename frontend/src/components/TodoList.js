@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 
 // --- 아이콘 SVG 컴포넌트 ---
-const ChevronLeftIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg> );
-const ChevronRightIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg> );
+const ChevronLeftIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg> );
+const ChevronRightIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg> );
 const PlusIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> );
 const TrashIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg> );
 
+// --- [추가] API 기본 URL 설정 ---
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
+// --- Helper Functions ---
 const groupTodosByDate = (flatTodos) => {
     if (!flatTodos || !Array.isArray(flatTodos)) return {};
     return flatTodos.reduce((acc, todo) => {
@@ -22,13 +25,12 @@ const groupTodosByDate = (flatTodos) => {
 const getDevHeaders = (user) => {
     const headers = { 'Content-Type': 'application/json' };
     if (window.location.hostname === 'localhost' && user?.nickname) {
-        // [수정] 한글 등 다국어 닉네임을 안전하게 전송하기 위해 인코딩합니다.
         headers['x-dev-user-id'] = encodeURIComponent(user.nickname);
     }
     return headers;
 };
 
-
+// --- Component ---
 function TodoCalendar({ user }) {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -43,7 +45,8 @@ function TodoCalendar({ user }) {
                 setIsLoading(true);
                 setError(null);
                 try {
-                    const response = await fetch('/api/todos', {
+                    // --- [수정 1] API 호출 경로 변경 ---
+                    const response = await fetch(`${API_BASE_URL}/api/todos`, {
                         headers: getDevHeaders(user)
                     });
                     if (!response.ok) {
@@ -71,11 +74,11 @@ function TodoCalendar({ user }) {
     };
 
     const formatDateKey = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1, 두 자리로 포맷팅
-    const day = String(date.getDate()).padStart(2, '0');    // 두 자리로 포맷팅
-    return `${year}-${month}-${day}`;
-};
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
 
     const handleAddTodo = async (e) => {
         e.preventDefault();
@@ -85,7 +88,8 @@ function TodoCalendar({ user }) {
         const newTodoData = { text, date: dateKey };
 
         try {
-            const response = await fetch('/api/todos', {
+            // --- [수정 2] API 호출 경로 변경 ---
+            const response = await fetch(`${API_BASE_URL}/api/todos`, {
                 method: 'POST',
                 headers: getDevHeaders(user),
                 body: JSON.stringify(newTodoData),
@@ -105,7 +109,8 @@ function TodoCalendar({ user }) {
         const newCompleted = !currentCompleted;
 
         try {
-            const response = await fetch(`/api/todos/${todoId}`, {
+            // --- [수정 3] API 호출 경로 변경 ---
+            const response = await fetch(`${API_BASE_URL}/api/todos/${todoId}`, {
                 method: 'PUT',
                 headers: getDevHeaders(user),
                 body: JSON.stringify({ completed: newCompleted })
@@ -124,7 +129,8 @@ function TodoCalendar({ user }) {
         const dateKey = formatDateKey(selectedDate);
 
         try {
-            const response = await fetch(`/api/todos/${todoId}`, {
+            // --- [수정 4] API 호출 경로 변경 ---
+            const response = await fetch(`${API_BASE_URL}/api/todos/${todoId}`, {
                 method: 'DELETE',
                 headers: getDevHeaders(user)
             });
@@ -143,6 +149,7 @@ function TodoCalendar({ user }) {
     };
 
     const renderCalendarDates = () => {
+        // ... (달력 렌더링 로직은 변경 없음) ...
         const month = currentDate.getMonth();
         const year = currentDate.getFullYear();
         const firstDayOfMonth = new Date(year, month, 1);
@@ -218,4 +225,3 @@ function TodoCalendar({ user }) {
 }
 
 export default TodoCalendar;
-
