@@ -19,11 +19,15 @@ const AuthPage = ({ onLogin }) => {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Login`, { /* ... */ });
+            // ▼▼▼ 여기부터 수정 ▼▼▼
+            // fetch 함수의 두 번째 인자로 method, headers, body를 포함하는 객체를 전달합니다.
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nickname, id, password })
             });
+            // ▲▲▲ 여기까지 수정 ▲▲▲
+
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.error || '회원가입 중 오류가 발생했습니다.');
@@ -42,16 +46,19 @@ const AuthPage = ({ onLogin }) => {
         setError('');
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Login`, { ... });
+            // ▼▼▼ 여기부터 수정 ▼▼▼
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id, password })
             });
+            // ▲▲▲ 여기까지 수정 ▲▲▲
+
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.error || '로그인 중 오류가 발생했습니다.');
             }
-            
+
             localStorage.setItem('user', JSON.stringify(data));
             onLogin(data);
 
@@ -94,4 +101,3 @@ const AuthPage = ({ onLogin }) => {
 };
 
 export default AuthPage;
-
