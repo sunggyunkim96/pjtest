@@ -215,4 +215,4 @@ const MindPostbox = () => {
                             disabled={isFetchingAudio}
                             title={isSpeaking ? "재생 중지" : "음성으로 듣기"}
                         >
-                            {isFetchingAudio ? <span className="loading
+                          {isFetchingAudio ? <span className="loading">로딩 중...</span> : null}
