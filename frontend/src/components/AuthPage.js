@@ -19,7 +19,7 @@ const AuthPage = ({ onLogin }) => {
 
         setIsLoading(true);
         try {
-            const response = await fetch('/api/Signup', {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Login`, { ... });
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nickname, id, password })
@@ -42,7 +42,7 @@ const AuthPage = ({ onLogin }) => {
         setError('');
         setIsLoading(true);
         try {
-            const response = await fetch('/api/Login', {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Login`, { ... });
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id, password })
