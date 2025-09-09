@@ -215,4 +215,31 @@ const MindPostbox = () => {
                             disabled={isFetchingAudio}
                             title={isSpeaking ? "재생 중지" : "음성으로 듣기"}
                         >
-                          {isFetchingAudio ? <span className="loading">로딩 중...</span> : null}
+                            {isFetchingAudio ? (
+                                <span className="loading">로딩 중...</span>
+                            ) : isSpeaking ? (
+                                <StopIcon />
+                            ) : (
+                                <SoundIcon />
+                            )}
+                        </button>
+                        <button 
+                            className="save-btn" 
+                            onClick={handleSaveMessage}
+                            disabled={isSaved}
+                            title={isSaved ? "저장됨" : "메시지 저장"}
+                        >
+                            <BookmarkIcon />
+                            {isSaved && <span className="saved-text">저장됨</span>}
+                        </button>
+                    </div>
+                    <button className="reset-btn" onClick={resetForm}>
+                        다시 쓰기
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default MindPostbox;
