@@ -26,15 +26,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18' # 프로젝트에 맞는 Node.js 버전 지정
-          # ★★★ 수정: 캐시 관리자를 npm에서 yarn으로 변경합니다.
-          cache: 'yarn'
-          # ★★★ 수정: 캐시 경로를 yarn.lock 파일로 변경합니다.
-          cache-dependency-path: yarn.lock
+          # ★★★ 수정: 캐시 관리자를 yarn에서 다시 npm으로 변경합니다.
+          cache: 'npm'
+          # ★★★ 수정: 실제 저장소에 있는 package-lock.json 파일로 경로를 수정합니다.
+          cache-dependency-path: package-lock.json
 
       # 3. Frontend 빌드 (의존성 설치 및 빌드 실행)
       - name: Build Frontend
-        # ★★★ 수정: npm 명령어를 yarn 명령어로 변경합니다.
+        # ★★★ 수정: yarn 명령어를 다시 npm 명령어로 변경합니다.
         run: |
-          yarn install
-          yarn build
+          npm install
+          npm run build
 
