@@ -19,7 +19,7 @@ const AuthPage = ({ onLogin }) => {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Login`, { ... });
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Login`, { /* ... */ });
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nickname, id, password })
