@@ -40,4 +40,4 @@ export default function NewsList({ date }) {
                 if (!alive) return;
                 setError(err.message || "뉴스 로딩 실패");
             })
-            .finally(() => alive && setPending(
+            .finally(() => alive && setPending(false));
