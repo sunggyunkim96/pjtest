@@ -21,11 +21,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Node.js 환경 설정 (Frontend 빌드용)
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      # ★★★ 디버깅 단계 추가 ★★★
+      # npm install을 실행하기 전에, 파일들이 실제로 어디에 있는지 확인합니다.
+      - name: Check file list
+        run: |
+          pwd
+          ls -la
 
       # 3. Frontend 빌드 (의존성 설치 및 빌드 실행)
       - name: Build Frontend
